@@ -7,40 +7,36 @@ import federation from '@originjs/vite-plugin-federation'
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/apps/host',
+  cacheDir: '../../node_modules/.vite/apps/remote_one',
   server: {
-    port: 4200,
+    port: 4201,
     host: 'localhost',
   },
   preview: {
-    port: 4300,
+    port: 4301,
     host: 'localhost',
   },
-  plugins: [
-    react(),
-    nxViteTsPaths(),
-    nxCopyAssetsPlugin(['*.md']),
-    federation({
-      name: 'host',
-      remotes: {
-        remote_one: 'http://localhost:8080/assets/remoteEntry.js',
-      },
-      shared: {
-        react: { requiredVersion: "18.3.1" },
-        "react-dom": { requiredVersion: "18.3.1" },
-        "react-router-dom": { requiredVersion: "6.11.2" }
-      }
-    })
-  ],
+  plugins: [react(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md']), federation({
+    name: 'remote_one',
+    filename: 'remoteEntry.js',
+    exposes: {
+      './App': './src/app/app.tsx',
+    },
+    shared: {
+      react: { requiredVersion: "18.3.1" },
+      "react-dom": { requiredVersion: "18.3.1" },
+      "react-router-dom": { requiredVersion: "6.11.2" }
+    }
+  })],
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],
   // },
   build: {
-    outDir: '../../dist/apps/host',
+    outDir: '../../dist/apps/remote_one',
     emptyOutDir: true,
-    target: 'esnext',
     reportCompressedSize: true,
+    target: 'esnext',
     commonjsOptions: {
       transformMixedEsModules: true,
     },
@@ -52,7 +48,7 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     reporters: ['default'],
     coverage: {
-      reportsDirectory: '../../coverage/apps/host',
+      reportsDirectory: '../../coverage/apps/remote_one',
       provider: 'v8',
     },
   },

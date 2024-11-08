@@ -1,0 +1,16 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_static_server
+    ports:
+      - "8080:80"  # localhost:8080 üzerinden erişim
+    volumes:
+      - ../dist/apps/:/usr/share/nginx/html:ro  # Statik HTML dosyalarını bağla
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro  # Özel nginx.conf dosyasını bağla
+    networks:
+      - nginx_network  # Özel ağ
+
+networks:
+  nginx_network:
+    driver: bridge

@@ -1,0 +1,12 @@
+FROM node:20 AS builder
+RUN npm install -g pnpm
+WORKDIR /app
+COPY package.json .
+RUN pnpm install
+COPY . .
+RUN nx build
+
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80

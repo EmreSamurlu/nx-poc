@@ -1,0 +1,38 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: inavitas-ui-nginx
+    ports:
+      - 8080:80
+
+  host:
+    build:
+      context: ../apps/host
+    container_name: inavitas-ui-host
+    ports:
+      - 80
+    networks:
+      - nginx_network
+
+  # remote_one:
+  #   build:
+  #     context: ../apps/remote_one
+  #   container_name: inavitas-ui-remote_one
+  #   ports:
+  #     - 80
+  #   networks:
+  #     - nginx_network
+
+  # remote_two:
+  #   build:
+  #     context: ../apps/remote_two
+  #   container_name: inavitas-ui-remote_two
+  #   ports:
+  #     - 80
+  #   networks:
+  #     - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge
